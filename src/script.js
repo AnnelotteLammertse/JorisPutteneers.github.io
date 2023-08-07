@@ -1,324 +1,201 @@
+// extract variables from js file
+const tagsCategories = [about, articles, projects, workshops];
+const tagsCategoriesString = ['about', 'articles', 'projects', 'workshops'];
 
-// console.log(userdata);
+const ScreenBorderOffsetX = 100; // in px
+const ScreenBorderOffsetY = 100; // in px
 
-exandTitle('Annelotte_Lammertse', userdata['Annelotte_Lammertse'])
-createmenu('menu_container','menu', open,  userdata['bio'], userdata['contact'])    
-
-for(var i = 0; i < objects.length; i++){
-  header_div()
+// Function to update the positions of the images on window resize
+function updateImagePositions() {
+  const imageContainers = document.querySelectorAll('.image-container');
+  imageContainers.forEach((imageContainer) => {
+    const left = Math.floor(Math.random() * (window.innerWidth - (300 + ScreenBorderOffsetX * 2))) + ScreenBorderOffsetX + "px";
+    const top = Math.floor(Math.random() * (window.innerHeight - (300 + ScreenBorderOffsetY * 2))) + ScreenBorderOffsetY + "px";
+    imageContainer.style.left = left;
+    imageContainer.style.top = top;
+  });
 }
 
+window.addEventListener('resize', updateImagePositions);
 
-// -----------------------------------functions
+const fooElement = document.getElementById('oaClick');
+let originalPositions = [];
+let isRandomLayout = true;
 
+fooElement.addEventListener('click', handleClick);
 
-function header_div(){
-  
-  
-  
-    
-    var images = document.getElementById("container") //grab images element
-    let object = eval('({' + objects[i] + '})')[objects[i]] //grab every object
+// Function to handle the click event on the button
+function handleClick() {
+  const imageContainers = document.querySelectorAll('.image-container');
+  const windowWidth = window.innerWidth;
+  const windowHeight = window.innerHeight;
 
-    let folder = document.createElement("div")
-    folder.classList.add('folder') //create a div class
-
-    let images_header = document.createElement("img") //create an image tag
-    images_header.classList.add('header') //create a class
-    images_header.src = object['images'][object['header_index']] //set the source to the images['header image']
-
-
-    let header_image = document.createElement("div")
-    header_image.classList.add('header_image') //create a class
-
-    images.appendChild(folder).appendChild(header_image).appendChild(images_header) //append the header to the original images tag 
-
-    let title = document.createElement("span") //create an image tag
-    title.classList.add('title')
-    title.innerHTML = object["folder_name"]
-
-    folder.appendChild(header_image).appendChild(document.createElement("br"))
-    folder.appendChild(header_image).appendChild(title)
-    let content = document.createElement("div")
-    
-    
-    
-    
-    
-    
-    var x = 1
-    
-    
-    let foobar = startup();
-    
-    // console.log(foobar);
-    
-    images_header.onclick = function() {    
-      // let foobar = startup();
-      
-      
-      x +=1
-      let text = document.createElement("span")
-      text.classList.add('text')
-      
-      if(x % 2 == 0){
-
-        console.log(x);
-        for(var i = 0; i < object["images"].length; i++){
-          content.classList.add('content')
-          // console.log(viewing);
-          let img = document.createElement("img")
-          img.classList.add('img')
-          img.src = object["images"][i]
-          folder.appendChild(content).appendChild(img)
-        }
-        readTextFile(object["text"], text, folder,content)
-      }
-      
-      else{content.replaceChildren()
-        
-      }
-      
-      
+  if (isRandomLayout) {
+    if (originalPositions.length === 0) {
+      imageContainers.forEach((container, index) => {
+        const { left, top } = container.getBoundingClientRect();
+        originalPositions[index] = { left, top };
+      });
     }
-  
-  function startup() {
-    
-    x += Math.round(Math.random())
-    array = []
-    if(x !=1){
-      array.push(object["folder_name"])
-      
-      let viewing = document.getElementById("viewing")
-      for(var i = 0; i<array.length; i++){
-        
-        let bar = document.createElement("div")
-        bar.innerHTML = array[i]
-        viewing.appendChild(bar)
-        
+
+    const gridSize = 200;
+    const gridColumns = Math.floor(windowWidth / gridSize);
+    const gridRows = Math.floor(windowHeight / gridSize);
+    const offsetX = (windowWidth - (gridColumns * gridSize)) / 2;
+    const offsetY = (windowHeight - (gridRows * gridSize)) / 2;
+
+    let gridX = 0;
+    let gridY = 0;
+
+    imageContainers.forEach((container, index) => {
+      const left = offsetX + gridX * gridSize;
+      const top = offsetY + gridY * gridSize;
+
+      container.style.left = `${left}px`;
+      container.style.top = `${top + 50}px`;
+      gridX++;
+      if (gridX >= gridColumns) {
+        gridX = 0;
+        gridY++;
       }
-      
-      // console.log(array);
-      
-    }
-    let text = document.createElement("span")
-    text.classList.add('text')
-    if(x % 2 == 0){
-      // console.log(x);
-      for(var i = 0; i < object["images"].length; i++){
-        
-        content.classList.add('content')
-        
-        let img = document.createElement("img")
-        img.classList.add('img')
-        img.src = object["images"][i]
-        folder.appendChild(content).appendChild(img)
-      }
-      readTextFile(object["text"], text, folder,content)
-    }
-    
-    // console.log(array);
-    // console.log(array);
-    // else{content.replaceChildren()}
-    return array
-    
+    });
+
+    fooElement.removeEventListener('click', handleClickAgain);
+    isRandomLayout = false;
+  } else {
+    imageContainers.forEach((container, index) => {
+      const { left, top } = originalPositions[index];
+      container.style.left = `${left}px`;
+      container.style.top = `${top}px`;
+    });
+
+    originalPositions = [];
+    fooElement.addEventListener('click', handleClickAgain);
+    isRandomLayout = true;
   }
-  // startup()
 }
 
-function readTextFile(file, text, folder, header_image, content)
-    {   let text_container = document.createElement("div")
-        text_container.classList.add('text_container')
-        var rawFile = new XMLHttpRequest();
-        rawFile.open("GET", file, false);
-        rawFile.onreadystatechange = function ()
-        {
-            if(rawFile.readyState === 4)
-            {
-                if(rawFile.status === 200 || rawFile.status == 0 )
-                {
-                    var allText = rawFile.responseText;
-                    text.innerHTML = allText
-                    // console.log(rawFile.status);
-                    header_image.appendChild(text_container).appendChild(text)  
-                }
-            }
-        }
-        rawFile.send(null);
-    }
-
-
-
-
-
-// make text appear on bio hover
-
-
-function exandTitle(id, content){
-
-  var Annelotte_lammertse_container = document.getElementById(id)
-  var Annelotte_lammertse = document.createElement('div')
-  Annelotte_lammertse.innerHTML = "Annelotte_Lammertse"
-  Annelotte_lammertse.classList.add("name")
-
-  Annelotte_lammertse_container.appendChild(Annelotte_lammertse)
-
-  var about = document.createElement("div")
-  about.innerHTML = content
-  
-
-  
-  about.classList.add('about')
-  Annelotte_lammertse_container.appendChild(about)
-  about.style.display = "none"
-
-  Annelotte_lammertse.addEventListener("click", function(){
-
-    if (about.style.display !== "none") {
-      about.style.display = "none";
-    } else {
-      about.style.display = "block";
-    }
-
-  }
-  );
-
+function handleClickAgain() {
+  handleClick();
 }
 
 
 
 
+// Loop through the tag categories and add images with text
+for (let i = 0; i < tagsCategories.length; i++) {
+  let category = tagsCategories[i];
+  let count = 1;
+  let counterElement = document.getElementById(tagsCategoriesString[i] + "N");
+  counterElement.innerText = "(" + Object.keys(category).length + ")";
 
-// create dynamic menu
-function createmenu(menu_container, menu,  expand, bio_text, contact_text){
-
-
-  var menu_container = document.getElementById(menu_container)
-  var menu = document.createElement("div")
-  menu.classList.add('menu')
-  menu.innerHTML = 'menu'
-  menu_container.appendChild(menu)
-
-
-  var menu_content = document.createElement("div")
-  menu_content.classList.add('menu_content')
-  menu_container.appendChild(menu_content)
-
-  var bio_container = document.createElement('div') //
-  var bio = document.createElement("div")
-  bio.innerHTML = "bio"
-  bio.classList.add('menu_item')
-  menu_content.appendChild(bio_container).appendChild(bio) //
-  
-
-  var bio_content = document.createElement("div")
-  bio_content.classList.add('menu_item_content')
-  bio_content.innerHTML =  bio_text
-  
-  bio_container.appendChild(bio_content) //
-
-  var projects_container = document.createElement('div')
-
-  var projects = document.createElement("div")
-  projects.innerHTML =  'project'
-  projects.classList.add('menu_item')
-
-  menu_content.appendChild(projects_container).appendChild(projects) //
-
-  var projects_content = document.createElement("div")
-  projects_content.classList.add('menu_item_content')
-
-  menu_content.appendChild(projects_content)
-  
-  var contact_container = document.createElement('div')
-  var contact = document.createElement("div")
-  contact.innerHTML = "contact"
-  contact.classList.add('menu_item')
-
-  menu_content.appendChild(contact_container).appendChild(contact) //
-  
-  var contact_content = document.createElement("div")
-  contact_content.classList.add('menu_item_content')
-  contact_content.innerHTML =  contact_text
-  
-  contact.appendChild(contact_content)
-
-  // ------------------------------
-  
-  for(var i = 0; i < objects.length; i++){
-    let object = eval('({' + objects[i] + '})')[objects[i]] 
-    let project_item = document.createElement("div")
-    project_item.addEventListener("click", function () {
-      console.log('ss')
-    })
-    project_item.innerHTML =object['folder_name']
-    projects_container.appendChild(projects_content).appendChild(project_item)
-  }
-  
-  contact_container.appendChild(contact_content)
-  
-
-  expand(menu,menu_content)
-  expand(bio,bio_content)
-  expand(projects,projects_content)
-  expand(contact,contact_content)
-  expandAll(menu,"menu_item_content")
-
-
-  }
-
-
-
-  
-  function open(container, content){
-
-    content.style.display = "none"
-    // console.log(typeof(content));
-    container.addEventListener("click", function () {
-      if (content.style.display !== "none") {
-          content.style.display = "none";
-        } else {
-          content.style.display = "block";
-        }})
-
-    };
-
-function expandAll(container, content){
-  let className = document.getElementsByClassName(content)
-
-    container.addEventListener("click", function () {
-      
-      for(var i = 0; i < className.length; i++){
-        
-        if (className[i].style.display !== "none") {
-          className[i].style.display = "none";
-        }
-      }
-    })
+  Object.keys(category).forEach((key) => {
+    let headerImg = category[key][2]["headerImg"];
+    addImageWithText(headerImg, key, tagsCategoriesString[i], Math.random(), count);
+    count++;
+  });
 }
 
+// Function to add an image with text to the page
+function addImageWithText(imageSrc, text, id, display, count) {
+  const imageContainer = document.createElement('div');
+  imageContainer.classList.add('image-container');
+  imageContainer.id = id;
 
+  const image = document.createElement('img');
+  image.src = imageSrc;
 
-// function larger(){
-//   let bigger = document.getElementById("bigger")
-//   let buttonpressed = 0
-//   bigger.addEventListener("click", function () {
-//     buttonpressed +=1
-//     let images = document.getElementsByClassName("img")
-//     for(var i = 0; i < images.length; i++){
-//       let buttonpressed_amount = 50+ (5 * buttonpressed)
-//       buttonpressed_amount.toString()
-//       buttonpressed_amount += 'px'
-//       console.log(images[i].style.maxHeight);
-//       images[i].style.maxHeight =buttonpressed_amount;
-//       // console.log();
-//     }
+  const titleText = document.createElement('span');
+  titleText.id = 'titleText';
+  titleText.textContent = text;
 
-//     // console.log('sdf');
+  const contentText = document.createElement('a');
+  contentText.id = 'contentText';
+  contentText.textContent = "full article";
+  contentText.href = './pages/' + text + ".html";
 
+  const contentId = document.createElement('span');
+  contentId.id = 'contentId';
+  contentId.textContent = id + "[" + count + "]";
 
+  imageContainer.appendChild(image);
+  imageContainer.appendChild(titleText);
+  imageContainer.appendChild(contentText);
+  imageContainer.appendChild(contentId);
 
-// }
-//   )
-// }
-// larger()
+  const tagsDiv = document.querySelector('#images');
+  tagsDiv.appendChild(imageContainer);
+
+  const left = Math.floor(Math.random() * (window.innerWidth - (300 + ScreenBorderOffsetX * 2))) + ScreenBorderOffsetX + "px";
+  const top = Math.floor(Math.random() * (window.innerHeight - (300 + ScreenBorderOffsetY * 2))) + ScreenBorderOffsetY + "px";
+  imageContainer.style.left = left;
+  imageContainer.style.top = top;
+
+  const iframe = document.createElement('iframe');
+  iframe.src = './pages/' + text + "-intro.html";
+  let displayMode = display < 0.2 ? "block" : "none";
+  iframe.style.display = displayMode;
+  iframe.style.position = 'absolute';
+  iframe.style.left = '0';
+  iframe.style.width = '100%';
+  iframe.style.height = '100%';
+  iframe.style.top = '0';
+  iframe.setAttribute(id, "myFrame");
+
+  imageContainer.appendChild(iframe);
+
+  imageContainer.addEventListener('click', () => {
+    iframe.style.opacity = (iframe.style.display === 'none') ? '1' : '0';
+    iframe.style.display = (iframe.style.display === 'none') ? 'block' : 'none';
+  });
+
+  iframe.addEventListener('click', () => {
+    window.location.href = './pages/' + text + ".html";
+  });
+
+  iframe.addEventListener('load', function() {
+    var iframeDocument = iframe.contentWindow.document;
+    iframeDocument.addEventListener('click', function() {
+      iframe.style.display = 'none';
+    });
+  });
+}
+
+// Function to toggle menu visibility
+function toggleVisibilityOnMenu(id, targetId) {
+  var menuItem = document.getElementById(id);
+  menuItem.addEventListener("click", function() {
+    var elements = document.querySelectorAll("#" + targetId);
+
+    for (var i = 0; i < elements.length; i++) {
+      var currentOpacity = parseFloat(elements[i].style.opacity);
+      elements[i].style.opacity = (currentOpacity === 0) ? "1" : "0";
+      menuItem.style.textDecoration = (currentOpacity === 0) ? "underline" : "none";
+    }
+  });
+}
+
+toggleVisibilityOnMenu("aboutClick", "about");
+toggleVisibilityOnMenu("projectsClick", "projects");
+toggleVisibilityOnMenu("workshopsClick", "workshops");
+toggleVisibilityOnMenu("articlesClick", "articles");
+
+// Function to resize the iframe on index.html
+function resizeIframe() {
+  var iframe = document.getElementById("iframeData");
+  var screenWidth = window.innerWidth;
+  var screenHeight = window.innerHeight;
+
+  var iframeWidth = (screenWidth < 500) ? screenWidth : screenWidth / 2;
+
+  iframe.style.width = iframeWidth + "px";
+  iframe.style.height = screenHeight * 0.8 + "px";
+}
+
+resizeIframe();
+window.addEventListener("resize", resizeIframe);
+
+// Function to change the parent URL if clicked inside an iframe link
+function changeParentURL(url) {
+  window.parent.location.href = url;
+}

@@ -1,26 +1,235 @@
- body{font-family: Arial, Helvetica}
- html{background-color: rgb(230,230,230);}
- .name{font-size: 2em; cursor: pointer;}
- .menu, .menu_item{cursor: pointer; font-weight: 600;  }
- .header_image{cursor: pointer;}
-.folder{display: flex;}
-.header { max-height: 200px; }
-.header_image{flex: 1; }
-.header_image:hover{opacity: 0.5;}
-.menu{font-family: Arial, Helvetica, sans-serif; font-weight: 600;}
-.menu_item_content{ margin-left:20px; }
-.menu_content{margin-left: 10px; font-weight: 400;}
+body {
+  margin: 0px;
+  font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+  background-color: rgb(101, 101, 101);
+}
 
-/* .header { max-height: 200px; } */
-/* .images_div { border: 1px solid blue;  } */
-/* .test {position: relative; } */
-.img {  max-height: 100px; font-size: 0; vertical-align: bottom; margin: 0; padding: 0;  }
-/* .content {height: 100%; width: 100%; object-fit: contain; } */
-/* .header_child {border: 1px solid green; max-hei} */
-/* .images_header_text{position: absolute;  top: 50%;  left: 50%;  transform: translate(-50%, -50%);} */
-.text_container {  max-width:100%; max-height:100%; }
-.text {  height: 200px; word-wrap: break-word;}
-.content{margin-left: 20px; }
-#Annelotte_Lammertse{color: blue;}
+img {
+  /*max-width: 300px;
+  max-height: 500px;*/
+  -webkit-box-shadow: -1px 3px 51px 3px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: -1px 3px 51px 3px rgba(0, 0, 0, 0.75);
+  box-shadow: -1px 3px 51px 3px rgba(0, 0, 0, 0.75);
+}
 
-#viewing{ float: right; position: fixed; top: 0px; right: 0px;}
+.image-container {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* transform: rotate(20deg); */
+  border-radius: 10px;
+}
+
+.image-container img {
+  display: block;
+  max-width: 200px;
+  border-bottom-left-radius: 0px;
+}
+
+.image-container #titleText {
+  position: absolute;
+  font-size: 1.5em;
+  color: rgb(237, 237, 237);
+  background-color: rgb(0, 0, 0);
+  left: 0px;
+  top: 0px;
+}
+
+.image-container #contentText {
+  position: absolute;
+  font-size: 1em;
+  color: rgb(0, 0, 0);
+  /* font-weight: bold; */
+  right: 0px;
+  bottom: 0px;
+  /* text-decoration: none; */
+}
+
+.image-container #contentId {
+  position: absolute;
+  font-size: 0.7em;
+  color: rgb(0, 0, 0);
+  left: 0px;
+  bottom: 0px;
+}
+
+.image-container:hover {
+  z-index: 1;
+  cursor: pointer;
+}
+
+#aboutN,
+#projectsN,
+#workshopsN,
+#articlesN {
+  color: red;
+  font-size: 20px;
+}
+
+#aboutClick,
+#projectsClick,
+#workshopsClick,
+#articlesClick {
+  font-size: 2em;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+#oaClick {
+  font-size: 4em;
+  cursor: pointer;
+}
+
+.deselected {
+  text-decoration: underline;
+}
+
+::selection {
+  background-color: rgb(124, 124, 124);
+}
+
+/* pages */
+
+.page {
+  background-color: rgb(78, 78, 78);
+  color: rgb(0, 0, 0);
+}
+
+.grid-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: 0px;
+  padding: 0px;
+}
+
+.image-container-pages {
+  flex: 0 0 33.33%;
+  padding: 10px;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.image-container-pages img {
+  max-width: 100%;
+  height: auto;
+}
+iframe{
+  border: none;
+}
+.iframeData{
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 50vw;
+  border: none;
+}
+
+button {
+  pointer-events: all;
+  background: none;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  /* Add any additional styles you want */
+}
+
+.imageFlex img{border: 10px solid red;
+  /* position: absolute; */
+  max-width: 100px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;}
+
+/* generated html files */
+
+.intro {
+  cursor: pointer;
+}
+
+.text{
+  margin: 50px;
+}
+
+.italic {
+  font-style: italic;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.underline {
+  text-decoration-line: underline;
+}
+
+.blue {
+  color: blue;
+}
+
+.red {
+  color: rgb(255, 0, 0);
+}
+
+.white {
+  color: rgb(255, 255, 255);
+}
+
+.black {
+  color: black;
+}
+
+.background-blue {
+  background-color: blue;
+}
+
+.background-red {
+  background-color: red;
+}
+
+.background-white {
+  background-color: white;
+}
+
+.background-black {
+  background-color: black;
+}
+
+.smallest {
+  font-size: 0.6em;
+}
+
+.smaller {
+  font-size: 0.75em;
+}
+
+.small {
+  font-size: 0.9em;
+}
+
+.big {
+  font-size: 2em;
+}
+
+.bigger {
+  font-size: 3em;
+}
+
+.biggest {
+  font-size: 4em;
+}
+
+.images {
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.images img {
+  margin: 10px;
+  max-height: 200px;
+}
